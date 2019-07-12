@@ -1,0 +1,10 @@
+.BuildControls {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+    padding: 10px 0;
+    width: 100%;
+    background-color: #cf8f2e;
+    box-shadow: 0 2px 1px #ccc;
+}
