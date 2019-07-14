@@ -30,6 +30,10 @@ const buildControls = (props) => {
             deleteOne={() => props.deleteOne(val.type)}
             disabled={props.disableObj[val.type]}
             ></BuildControl>)}
+            <button 
+            className={classes.OrderButton}
+            disabled={!props.purchasable}
+            >order now</button>
         </div>
     );
 }
