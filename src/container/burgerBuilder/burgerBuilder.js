@@ -21,7 +21,8 @@ class BurgerBuilder extends Component {
             meat: 0
         },
         total: 4,
-        purchasable: false
+        purchasable: false,
+        purchasing: false
     }
 
     updatePurchaseState (objCopy) {
@@ -68,6 +69,19 @@ class BurgerBuilder extends Component {
         })
         this.updatePurchaseState(objCopy)
     }
+    purchaseHandle = () => {
+        this.setState({
+            purchasing: true
+        })
+    }
+    purchaseCancelHandle = () => {
+        this.setState({
+            purchasing: false
+        })
+    }
+    purchaseContinueHandle = () => {
+        alert('success')
+    }
     render() {
         const disableObj = Object.keys(this.state.ingredients).reduce((res,val) => {
             res[val] = this.state.ingredients[val] <= 0
@@ -75,8 +89,16 @@ class BurgerBuilder extends Component {
         },{})
         return (
             <Aux>
-                <Modal>
-                    <OrderSummary ingredients={this.state.ingredients}></OrderSummary>
+                <Modal 
+                show={this.state.purchasing}
+                modalClose={this.purchaseCancelHandle}
+                >
+                    <OrderSummary 
+                        price={this.state.total.toFixed(2)}
+                        ingredients={this.state.ingredients}
+                        purchaseCanceled={this.purchaseCancelHandle}
+                        purchaseContinued={this.purchaseContinueHandle}
+                    ></OrderSummary>
                 </Modal>
                 <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
@@ -84,6 +106,7 @@ class BurgerBuilder extends Component {
                 addMore={this.addMore} 
                 deleteOne={this.deleteOne} 
                 disableObj={disableObj}
+                ordered={this.purchaseHandle}
                 purchasable={this.state.purchasable}
                 ></BuildControls>
                 
