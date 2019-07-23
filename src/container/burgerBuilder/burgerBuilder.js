@@ -5,6 +5,7 @@ import Burger from '../../components/burger/burger'
 import BuildControls from '../../components/burger/buildControls/buildControls'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/burger/orderSummary/orderSummary.js'
+import axios from '../../axios-order'
 
 const  INGREDIENTS_PRICE = {
     salad: 0.5,
@@ -80,7 +81,31 @@ class BurgerBuilder extends Component {
         })
     }
     purchaseContinueHandle = () => {
-        alert('success')
+        // alert('success')
+        const order = {
+            ingredients: this.state.ingredients,
+            preice: this.state.total,
+            customer: {
+                name: 'wanli.yu',
+                address: {
+                    street: 'beibei',
+                    zipCode: '123'
+                },
+                email: 'wanli.yu@beibei.com.cn'
+            }
+        }
+        // axios.post('/orders.json',order)
+        //     .then(res => {
+        //         console.log(res)
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
+        const queryString = Object.keys(this.state.ingredients).map((val) => `${val}=${this.state.ingredients[val]}`).join('&')
+        this.props.history.push({
+            pathname: '/checkout',
+            search:'?' + queryString
+        })
     }
     render() {
         const disableObj = Object.keys(this.state.ingredients).reduce((res,val) => {
