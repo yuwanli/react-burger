@@ -12,7 +12,11 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'your name'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true
+                },
+                touched: false
             },
             email: {
                 eleType: 'input',
@@ -36,7 +40,12 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'your postal'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 4,
+                    maxLength: 8
+                }
             },
             methods: {
                 eleType: 'select',
@@ -62,10 +71,32 @@ class ContactData extends Component {
         console.log(formData)
         // alert('order success')
     }
+
+    checkValidity(value,rules){
+        let isValid = true;
+
+        if (rules.required){
+            isValid = !!value.trim()  && isValid
+        }
+
+        if (rules.minLength) {
+            isValid = (value.length >= rules.minLength) && isValid
+        }
+
+        if (rules.maxLength) {
+            isValid = (value.length <= rules.maxLength) && isValid
+        }
+
+        return isValid
+    }
+
+
     changehandler = (event,key) => {
         const formData = {...this.state.orderForm}
         const current = {...formData[key]}
         current.value = event.target.value
+        current.valid = this.checkValidity(current.value,current.validation || {})
+        current.touched = true
         formData[key] = current
         this.setState({orderForm:formData})
     }
@@ -84,6 +115,9 @@ class ContactData extends Component {
                         <SelfInput 
                         key={ele.id}
                         change={(event) => this.changehandler(event,ele.id)}
+                        invalid={!ele.config.valid}
+                        touched={ele.config.touched}
+                        shouldValidate={ele.config.validation}
                         eleType={ele.config.eleType} 
                         eleConfig={ele.config.eleConfig} 
                         eleValue={ele.config.value}></SelfInput>
